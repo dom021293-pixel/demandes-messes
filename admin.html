@@ -216,8 +216,8 @@
     </div>
     
     <div class="container">
-        <!-- ⚠️ REMPLACE LE src PAR TON URL DE PUBLICATION WEB GOOGLE SHEETS -->
-       <iframe id="sheetIframe" src="https://docs.google.com/spreadsheets/d/e/REMPLACE_PAR_TON_URL_PUBLIEE/pubhtml?widget=true&amp;headers=false"></iframe>
+        <!-- ✅ CORRIGÉ : J'ai mis la bonne URL de publication -->
+        <iframe id="sheetIframe" src="https://docs.google.com/spreadsheets/d/1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ/pubhtml?widget=true&amp;headers=false"></iframe>
     </div>
     
     <div class="footer">
@@ -226,8 +226,7 @@
     </div>
     
     <script>
-        // ⚠️ REMPLACE CETTE URL PAR L'URL DE TA FEUILLE GOOGLE SHEETS (édition)
-        // Pour trouver l'URL : ouvre ta feuille et copie l'URL dans la barre d'adresse
+        // ✅ CORRIGÉ : URL d'édition (déjà bonne)
         const SHEETS_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ/edit';
         
         // Met à jour le lien du bouton
@@ -252,8 +251,6 @@
         
         // Simuler des stats (optionnel - peut être amélioré avec une vraie API)
         function updateStats() {
-            // Cette fonction est décorative
-            // Pour des vraies stats, il faudrait appeler l'API Google Sheets
             const statsDiv = document.getElementById('stats');
             statsDiv.innerHTML = `
                 <div class="stat-card">
