@@ -35,86 +35,13 @@
             opacity: 0.9;
         }
         
-        .info-bar {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 14px 20px;
-            margin: 16px;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-        
-        .info-bar a {
-            color: #1e3c72;
-            font-weight: bold;
-        }
-        
-        .info-bar strong {
-            color: #856404;
-        }
-        
-        .actions {
-            display: flex;
-            gap: 12px;
-            padding: 0 16px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s, background 0.2s;
-            cursor: pointer;
-            border: none;
-            font-size: 14px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .container {
-            margin: 0 16px 16px 16px;
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-        }
-        
-        iframe {
-            width: 100%;
-            height: 65vh;
-            border: none;
-            display: block;
-        }
-        
         .stats {
             display: flex;
             gap: 12px;
             padding: 16px;
             flex-wrap: wrap;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .stat-card {
@@ -139,6 +66,75 @@
             margin-top: 4px;
         }
         
+        .info-bar {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 14px 20px;
+            margin: 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            max-width: 800px;
+            margin: 16px auto;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 12px;
+            padding: 0 16px;
+            margin: 24px auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, background 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .preview-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px auto;
+            max-width: 900px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        
+        .preview-card h3 {
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        .preview-card img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
         .footer {
             text-align: center;
             padding: 20px;
@@ -146,41 +142,14 @@
             font-size: 12px;
         }
         
-        .refresh-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #28a745;
-            border-radius: 50%;
-            margin-right: 6px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
-        
         @media (max-width: 768px) {
             .btn {
-                flex: 1;
-                justify-content: center;
-                font-size: 13px;
-                padding: 10px 16px;
+                padding: 12px 20px;
+                font-size: 14px;
             }
             
-            iframe {
-                height: 55vh;
-            }
-            
-            .header h1 {
-                font-size: 1.3rem;
-            }
-            
-            .info-bar {
-                font-size: 12px;
-                padding: 10px 16px;
+            .stat-number {
+                font-size: 22px;
             }
         }
     </style>
@@ -204,52 +173,35 @@
     </div>
     
     <div class="actions">
-        <a href="#" id="openSheetsBtn" target="_blank" class="btn btn-primary">
-            📊 Ouvrir dans Google Sheets
+        <a href="https://docs.google.com/spreadsheets/d/1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ/edit" target="_blank" class="btn btn-primary">
+            📊 Ouvrir Google Sheets (édition complète)
         </a>
-        <button onclick="window.location.reload();" class="btn btn-secondary">
-            🔄 Actualiser la page
-        </button>
-        <button onclick="rafraichirIframe();" class="btn btn-success">
-            🔁 Rafraîchir le tableau
-        </button>
+        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04tZqrMVf03yJwnkzBXX6xaeZPy0biNGUCpRVF6e0-WKaHGGDN8Qa8OJKJk4C4YoBXxcse9EAtrVl/pubhtml" target="_blank" class="btn btn-secondary">
+            👁️ Voir la version publiée
+        </a>
     </div>
     
-    <div class="container">
-        <!-- ✅ CORRIGÉ : J'ai mis la bonne URL de publication -->
-        <iframe id="sheetIframe" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04tZqrMVf03yJwnkzBXX6xaeZPy0biNGUCpRVF6e0-WKaHGGDN8Qa8OJKJk4C4YoBXxcse9EAtrVl/pubhtml?widget=true&amp;headers=false"></iframe>
+    <div class="preview-card">
+        <h3>📋 Aperçu des demandes</h3>
+        <p style="margin-bottom: 16px; color: #666;">Cliquez sur l'un des boutons ci-dessus pour accéder à votre tableau</p>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23f0f2f5'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23666' font-family='system-ui'%3E📊 Tableau des demandes%3C/text%3E%3C/svg%3E" alt="Aperçu tableau">
     </div>
     
     <div class="footer">
-        <span class="refresh-indicator"></span> Mise à jour automatique toutes les 2 minutes<br>
-        Dernier rafraîchissement : <span id="lastUpdate"></span>
+        Dernière vérification : <span id="lastUpdate"></span>
     </div>
     
     <script>
-        // ✅ CORRIGÉ : URL d'édition (déjà bonne)
+        // URL de la feuille pour les statistiques (optionnel)
         const SHEETS_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ/edit';
         
-        // Met à jour le lien du bouton
-        document.getElementById('openSheetsBtn').href = SHEETS_EDIT_URL;
-        
-        // Fonction pour rafraîchir l'iframe
-        function rafraichirIframe() {
-            const iframe = document.getElementById('sheetIframe');
-            const src = iframe.src;
-            iframe.src = '';
-            setTimeout(() => {
-                iframe.src = src;
-            }, 100);
-            updateLastUpdateTime();
-        }
-        
-        // Met à jour l'heure du dernier rafraîchissement
+        // Met à jour l'heure
         function updateLastUpdateTime() {
             const now = new Date();
             document.getElementById('lastUpdate').textContent = now.toLocaleString('fr-FR');
         }
         
-        // Simuler des stats (optionnel - peut être amélioré avec une vraie API)
+        // Statistiques indicatives
         function updateStats() {
             const statsDiv = document.getElementById('stats');
             statsDiv.innerHTML = `
@@ -268,27 +220,12 @@
             `;
         }
         
-        // Actualisation automatique toutes les 2 minutes
-        setInterval(() => {
-            rafraichirIframe();
-        }, 120000);
-        
         // Initialisation
         updateStats();
         updateLastUpdateTime();
         
-        // Afficher un message si l'iframe ne se charge pas
-        const iframe = document.getElementById('sheetIframe');
-        iframe.onerror = function() {
-            console.error("Erreur de chargement de l'iframe");
-            const container = document.querySelector('.container');
-            const errorMsg = document.createElement('div');
-            errorMsg.style.padding = '20px';
-            errorMsg.style.textAlign = 'center';
-            errorMsg.style.color = '#dc3545';
-            errorMsg.innerHTML = '❌ Impossible de charger le tableau. Vérifie que tu as bien publié ta feuille (Fichier → Partager → Publier sur le web).';
-            container.appendChild(errorMsg);
-        };
+        // Rafraîchir l'heure toutes les minutes
+        setInterval(updateLastUpdateTime, 60000);
     </script>
 </body>
 </html>
