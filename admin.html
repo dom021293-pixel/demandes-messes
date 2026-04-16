@@ -5,27 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Demandes de messe</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: system-ui;
-            max-width: 1200px;
-            margin: 0 auto;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
             padding: 20px;
-            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 20px;
+            padding: 24px;
             border-radius: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
         
-        .card {
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2a5298;
+        }
+        
+        .filter-bar {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-bar input, .filter-bar select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .demandes-list {
             background: white;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+            overflow-x: auto;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
@@ -34,71 +81,241 @@
             border-collapse: collapse;
         }
         
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
         th {
-            background: #667eea;
+            background: #2a5298;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .statut {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .statut-non-traitee {
+            background: #ff4757;
             color: white;
         }
         
-        .badge {
-            background: #4CAF50;
+        .statut-traitee {
+            background: #2ed573;
             color: white;
-            padding: 4px 8px;
-            border-radius: 8px;
+        }
+        
+        .btn-action {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 12px;
         }
         
-        input {
-            padding: 10px;
-            margin: 10px 0;
-            width: 100%;
-            max-width: 300px;
+        .btn-action:hover {
+            background: #1e3c72;
+        }
+        
+        .refresh-btn {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
+            
+            .stat-card {
+                padding: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>📋 Administration - Demandes de messe</h1>
-        <p>Gérez les intentions reçues</p>
-    </div>
-    
-    <div class="card">
-        <h2>📊 Statistiques</h2>
-        <p>Total des demandes : <strong id="totalCount">0</strong></p>
-        <input type="text" id="search" placeholder="🔍 Rechercher par nom...">
-    </div>
-    
-    <div class="card">
-        <div id="demandes"></div>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Administration des messes</h1>
+            <p>Gérez les intentions de messe reçues</p>
+        </div>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCount">0</div>
+                <div>Total demandes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingCount">0</div>
+                <div>En attente</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="todayCount">0</div>
+                <div>Demandes aujourd'hui</div>
+            </div>
+        </div>
+        
+        <div class="filter-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Rechercher par nom...">
+            <select id="statusFilter">
+                <option value="all">Tous les statuts</option>
+                <option value="Non traitée">Non traitées</option>
+                <option value="Traité">Traitées</option>
+            </select>
+            <button class="refresh-btn" onclick="chargerDemandes()">🔄 Actualiser</button>
+        </div>
+        
+        <div class="demandes-list">
+            <div id="demandesContent" class="loading">
+                ⏳ Chargement des demandes...
+            </div>
+        </div>
     </div>
     
     <script>
-        // Pour afficher les données, il faudrait une autre fonction Google Sheets
-        // Méthode plus simple : partager la feuille Google Sheets en lecture seule
-        // et l'intégrer ici
+        // REMPLACE CETTE URL PAR TON URL APPS SCRIPT
+        const API_URL = 'TON_URL_APPS_SCRIPT_ICI';
         
-        // Option simple : intègre directement ta feuille Google Sheets
-        const sheetUrl = 'https://script.google.com/macros/s/AKfycbz0WCIERXHPzoSW3NdChenKEWQEfqPiWmrDtzSrkI71Hq9PicWpILhHrvckFEeoFTik/exec';
+        let toutesLesDemandes = [];
         
-        // Ou utilise Google Sheets API si tu veux plus de contrôle
-        // Version simplifiée pour l'instant : affiche un lien
-        document.getElementById('demandes').innerHTML = `
-            <p>🔐 Accès admin :</p>
-            <a href="${sheetUrl}" target="_blank" style="display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px;">
-                📊 Ouvrir le tableau des demandes
-            </a>
-            <p style="margin-top: 20px; color: #666;">Vous pouvez aussi :</p>
-            <ul>
-                <li>✅ Marquer les demandes comme traitées</li>
-                <li>📧 Contacter les fidèles par téléphone</li>
-                <li>📅 Planifier les messes</li>
-            </ul>
-        `;
+        async function chargerDemandes() {
+            try {
+                document.getElementById('demandesContent').innerHTML = '<div class="loading">⏳ Chargement...</div>';
+                
+                const response = await fetch(API_URL);
+                const demandes = await response.json();
+                toutesLesDemandes = demandes;
+                
+                afficherDemandes();
+                mettreAJourStats();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                document.getElementById('demandesContent').innerHTML = `
+                    <div class="loading" style="color: red;">
+                        ❌ Erreur de chargement. Vérifie que l'URL est correcte.<br>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+        
+        function afficherDemandes() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            let filtered = toutesLesDemandes.filter(demande => {
+                const matchSearch = demande.nom.toLowerCase().includes(searchTerm);
+                const matchStatus = statusFilter === 'all' || demande.statut === statusFilter;
+                return matchSearch && matchStatus;
+            });
+            
+            if (filtered.length === 0) {
+                document.getElementById('demandesContent').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #999;">
+                        📭 Aucune demande trouvée
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date demande</th>
+                            <th>Nom</th>
+                            <th>Date messe</th>
+                            <th>Horaire</th>
+                            <th>Intention</th>
+                            <th>Téléphone</th>
+                            <th>Statut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            filtered.forEach((demande, index) => {
+                html += `
+                    <tr>
+                        <td>${new Date(demande.horodatage).toLocaleDateString('fr-FR')}</td>
+                        <td><strong>${demande.nom}</strong></td>
+                        <td>${new Date(demande.date).toLocaleDateString('fr-FR')}</td>
+                        <td>${demande.horaire}</td>
+                        <td style="max-width: 250px;">${demande.intention.substring(0, 60)}${demande.intention.length > 60 ? '...' : ''}</td>
+                        <td>${demande.telephone || 'Non fourni'}</td>
+                        <td>
+                            <span class="statut ${demande.statut === 'Non traitée' ? 'statut-non-traitee' : 'statut-traitee'}">
+                                ${demande.statut}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-action" onclick="marquerTraite(${index})">
+                                ✅ Marquer traitée
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `</tbody></table>`;
+            document.getElementById('demandesContent').innerHTML = html;
+        }
+        
+        function marquerTraite(index) {
+            // Pour l'instant, juste un message
+            // Idéalement, tu mettrais à jour Google Sheets via une autre API
+            alert("💡 Fonctionnalité : Tu peux manuellement marquer comme traité dans Google Sheets");
+        }
+        
+        function mettreAJourStats() {
+            const total = toutesLesDemandes.length;
+            const pending = toutesLesDemandes.filter(d => d.statut === 'Non traitée').length;
+            const today = toutesLesDemandes.filter(d => {
+                const dateDemande = new Date(d.horodatage).toDateString();
+                const todayDate = new Date().toDateString();
+                return dateDemande === todayDate;
+            }).length;
+            
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('todayCount').textContent = today;
+        }
+        
+        // Recherche en temps réel
+        document.getElementById('searchInput').addEventListener('input', afficherDemandes);
+        document.getElementById('statusFilter').addEventListener('change', afficherDemandes);
+        
+        // Charger au démarrage
+        chargerDemandes();
+        
+        // Actualiser toutes les 30 secondes
+        setInterval(chargerDemandes, 30000);
     </script>
 </body>
 </html>
