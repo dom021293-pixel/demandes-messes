@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Admin - Demandes de messe</title>
     <style>
         * {
@@ -14,308 +14,284 @@
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             background: #f0f2f5;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            min-height: 100vh;
         }
         
         .header {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 24px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .info-bar {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 14px 20px;
+            margin: 16px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .info-bar a {
+            color: #1e3c72;
+            font-weight: bold;
+        }
+        
+        .info-bar strong {
+            color: #856404;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 12px;
+            padding: 0 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, background 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            margin: 0 16px 16px 16px;
+            background: white;
             border-radius: 16px;
-            margin-bottom: 24px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        
+        iframe {
+            width: 100%;
+            height: 65vh;
+            border: none;
+            display: block;
         }
         
         .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            flex-wrap: wrap;
         }
         
         .stat-card {
             background: white;
-            padding: 20px;
+            flex: 1;
+            min-width: 100px;
+            padding: 16px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .stat-number {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
             color: #2a5298;
         }
         
-        .filter-bar {
-            background: white;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-bar input, .filter-bar select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            flex: 1;
-            min-width: 150px;
-        }
-        
-        .demandes-list {
-            background: white;
-            border-radius: 12px;
-            overflow-x: auto;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th {
-            background: #2a5298;
-            color: white;
-            padding: 14px;
-            text-align: left;
-            font-weight: 600;
-        }
-        
-        td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        tr:hover {
-            background: #f8f9fa;
-        }
-        
-        .statut {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
+        .stat-label {
             font-size: 12px;
-            font-weight: 600;
+            color: #666;
+            margin-top: 4px;
         }
         
-        .statut-non-traitee {
-            background: #ff4757;
-            color: white;
-        }
-        
-        .statut-traitee {
-            background: #2ed573;
-            color: white;
-        }
-        
-        .btn-action {
-            background: #2a5298;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
-        .btn-action:hover {
-            background: #1e3c72;
-        }
-        
-        .refresh-btn {
-            background: #2a5298;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 16px;
-        }
-        
-        .loading {
+        .footer {
             text-align: center;
-            padding: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .refresh-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
         }
         
         @media (max-width: 768px) {
-            th, td {
-                font-size: 12px;
-                padding: 8px;
+            .btn {
+                flex: 1;
+                justify-content: center;
+                font-size: 13px;
+                padding: 10px 16px;
             }
             
-            .stat-card {
-                padding: 12px;
+            iframe {
+                height: 55vh;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .info-bar {
+                font-size: 12px;
+                padding: 10px 16px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>📋 Administration des messes</h1>
+        <p>Gérez les intentions de messe en temps réel</p>
+    </div>
+    
+    <div class="stats" id="stats">
+        <!-- Les stats seront mises à jour dynamiquement -->
+    </div>
+    
+    <div class="info-bar">
+        💡 <strong>Conseils :</strong><br>
+        • Les nouvelles demandes apparaissent automatiquement en <strong>bas du tableau</strong><br>
+        • Pour <strong>marquer une demande comme traitée</strong> : ajoute une colonne "Statut" et écris "Traité"<br>
+        • Pour recevoir un <strong>email à chaque nouvelle demande</strong> : Outils → Notifications → Email immédiat<br>
+        • Vous pouvez <strong>filtrer, trier</strong> et <strong>exporter</strong> les demandes directement dans le tableau
+    </div>
+    
+    <div class="actions">
+        <a href="#" id="openSheetsBtn" target="_blank" class="btn btn-primary">
+            📊 Ouvrir dans Google Sheets
+        </a>
+        <button onclick="window.location.reload();" class="btn btn-secondary">
+            🔄 Actualiser la page
+        </button>
+        <button onclick="rafraichirIframe();" class="btn btn-success">
+            🔁 Rafraîchir le tableau
+        </button>
+    </div>
+    
     <div class="container">
-        <div class="header">
-            <h1>📋 Administration des messes</h1>
-            <p>Gérez les intentions de messe reçues</p>
-        </div>
-        
-        <div class="stats" id="stats">
-            <div class="stat-card">
-                <div class="stat-number" id="totalCount">0</div>
-                <div>Total demandes</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="pendingCount">0</div>
-                <div>En attente</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="todayCount">0</div>
-                <div>Demandes aujourd'hui</div>
-            </div>
-        </div>
-        
-        <div class="filter-bar">
-            <input type="text" id="searchInput" placeholder="🔍 Rechercher par nom...">
-            <select id="statusFilter">
-                <option value="all">Tous les statuts</option>
-                <option value="Non traitée">Non traitées</option>
-                <option value="Traité">Traitées</option>
-            </select>
-            <button class="refresh-btn" onclick="chargerDemandes()">🔄 Actualiser</button>
-        </div>
-        
-        <div class="demandes-list">
-            <div id="demandesContent" class="loading">
-                ⏳ Chargement des demandes...
-            </div>
-        </div>
+        <!-- ⚠️ REMPLACE LE src PAR TON URL DE PUBLICATION WEB GOOGLE SHEETS -->
+        <iframe id="sheetIframe" src="https://docs.google.com/spreadsheets/d/e/REMPLACE_PAR_TON_URL_PUBLIEE/pubhtml?widget=true&amp;headers=false"></iframe>
+    </div>
+    
+    <div class="footer">
+        <span class="refresh-indicator"></span> Mise à jour automatique toutes les 2 minutes<br>
+        Dernier rafraîchissement : <span id="lastUpdate"></span>
     </div>
     
     <script>
-        // REMPLACE CETTE URL PAR TON URL APPS SCRIPT
-        const API_URL = 'TON_URL_APPS_SCRIPT_ICI';
+        // ⚠️ REMPLACE CETTE URL PAR L'URL DE TA FEUILLE GOOGLE SHEETS (édition)
+        // Pour trouver l'URL : ouvre ta feuille et copie l'URL dans la barre d'adresse
+        const SHEETS_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ/edit';
         
-        let toutesLesDemandes = [];
+        // Met à jour le lien du bouton
+        document.getElementById('openSheetsBtn').href = SHEETS_EDIT_URL;
         
-        async function chargerDemandes() {
-            try {
-                document.getElementById('demandesContent').innerHTML = '<div class="loading">⏳ Chargement...</div>';
-                
-                const response = await fetch(API_URL);
-                const demandes = await response.json();
-                toutesLesDemandes = demandes;
-                
-                afficherDemandes();
-                mettreAJourStats();
-                
-            } catch (error) {
-                console.error('Erreur:', error);
-                document.getElementById('demandesContent').innerHTML = `
-                    <div class="loading" style="color: red;">
-                        ❌ Erreur de chargement. Vérifie que l'URL est correcte.<br>
-                        <small>${error.message}</small>
-                    </div>
-                `;
-            }
+        // Fonction pour rafraîchir l'iframe
+        function rafraichirIframe() {
+            const iframe = document.getElementById('sheetIframe');
+            const src = iframe.src;
+            iframe.src = '';
+            setTimeout(() => {
+                iframe.src = src;
+            }, 100);
+            updateLastUpdateTime();
         }
         
-        function afficherDemandes() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const statusFilter = document.getElementById('statusFilter').value;
-            
-            let filtered = toutesLesDemandes.filter(demande => {
-                const matchSearch = demande.nom.toLowerCase().includes(searchTerm);
-                const matchStatus = statusFilter === 'all' || demande.statut === statusFilter;
-                return matchSearch && matchStatus;
-            });
-            
-            if (filtered.length === 0) {
-                document.getElementById('demandesContent').innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #999;">
-                        📭 Aucune demande trouvée
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date demande</th>
-                            <th>Nom</th>
-                            <th>Date messe</th>
-                            <th>Horaire</th>
-                            <th>Intention</th>
-                            <th>Téléphone</th>
-                            <th>Statut</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        // Met à jour l'heure du dernier rafraîchissement
+        function updateLastUpdateTime() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleString('fr-FR');
+        }
+        
+        // Simuler des stats (optionnel - peut être amélioré avec une vraie API)
+        function updateStats() {
+            // Cette fonction est décorative
+            // Pour des vraies stats, il faudrait appeler l'API Google Sheets
+            const statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">📊</div>
+                    <div class="stat-label">Consultez le tableau</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">✅</div>
+                    <div class="stat-label">Marquez les traités</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">📧</div>
+                    <div class="stat-label">Notifications email</div>
+                </div>
             `;
-            
-            filtered.forEach((demande, index) => {
-                html += `
-                    <tr>
-                        <td>${new Date(demande.horodatage).toLocaleDateString('fr-FR')}</td>
-                        <td><strong>${demande.nom}</strong></td>
-                        <td>${new Date(demande.date).toLocaleDateString('fr-FR')}</td>
-                        <td>${demande.horaire}</td>
-                        <td style="max-width: 250px;">${demande.intention.substring(0, 60)}${demande.intention.length > 60 ? '...' : ''}</td>
-                        <td>${demande.telephone || 'Non fourni'}</td>
-                        <td>
-                            <span class="statut ${demande.statut === 'Non traitée' ? 'statut-non-traitee' : 'statut-traitee'}">
-                                ${demande.statut}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn-action" onclick="marquerTraite(${index})">
-                                ✅ Marquer traitée
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            html += `</tbody></table>`;
-            document.getElementById('demandesContent').innerHTML = html;
         }
         
-        function marquerTraite(index) {
-            // Pour l'instant, juste un message
-            // Idéalement, tu mettrais à jour Google Sheets via une autre API
-            alert("💡 Fonctionnalité : Tu peux manuellement marquer comme traité dans Google Sheets");
-        }
+        // Actualisation automatique toutes les 2 minutes
+        setInterval(() => {
+            rafraichirIframe();
+        }, 120000);
         
-        function mettreAJourStats() {
-            const total = toutesLesDemandes.length;
-            const pending = toutesLesDemandes.filter(d => d.statut === 'Non traitée').length;
-            const today = toutesLesDemandes.filter(d => {
-                const dateDemande = new Date(d.horodatage).toDateString();
-                const todayDate = new Date().toDateString();
-                return dateDemande === todayDate;
-            }).length;
-            
-            document.getElementById('totalCount').textContent = total;
-            document.getElementById('pendingCount').textContent = pending;
-            document.getElementById('todayCount').textContent = today;
-        }
+        // Initialisation
+        updateStats();
+        updateLastUpdateTime();
         
-        // Recherche en temps réel
-        document.getElementById('searchInput').addEventListener('input', afficherDemandes);
-        document.getElementById('statusFilter').addEventListener('change', afficherDemandes);
-        
-        // Charger au démarrage
-        chargerDemandes();
-        
-        // Actualiser toutes les 30 secondes
-        setInterval(chargerDemandes, 30000);
+        // Afficher un message si l'iframe ne se charge pas
+        const iframe = document.getElementById('sheetIframe');
+        iframe.onerror = function() {
+            console.error("Erreur de chargement de l'iframe");
+            const container = document.querySelector('.container');
+            const errorMsg = document.createElement('div');
+            errorMsg.style.padding = '20px';
+            errorMsg.style.textAlign = 'center';
+            errorMsg.style.color = '#dc3545';
+            errorMsg.innerHTML = '❌ Impossible de charger le tableau. Vérifie que tu as bien publié ta feuille (Fichier → Partager → Publier sur le web).';
+            container.appendChild(errorMsg);
+        };
     </script>
 </body>
 </html>
