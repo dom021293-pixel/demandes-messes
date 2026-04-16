@@ -23,7 +23,7 @@
         }
         
         .container {
-            max-width: 550px;
+            max-width: 600px;
             width: 100%;
             background: white;
             border-radius: 28px;
@@ -74,7 +74,7 @@
         
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 100px;
         }
         
         .category-buttons {
@@ -102,15 +102,82 @@
             border-color: transparent;
         }
         
-        .price {
-            background: #f0f2f5;
-            padding: 12px;
+        .intention-item {
+            background: #f8f9fa;
             border-radius: 12px;
-            text-align: right;
-            font-size: 1.2rem;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .intention-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .intention-title {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .intention-price {
+            color: #2a5298;
+            font-weight: bold;
+        }
+        
+        .intention-text {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+        
+        .remove-intention {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .add-intention-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .price {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 15px 0;
+            border: 1px solid #667eea;
+        }
+        
+        .price-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .price-amount {
+            font-size: 28px;
             font-weight: bold;
             color: #2a5298;
-            margin: 10px 0;
         }
         
         button {
@@ -188,6 +255,7 @@
             color: #25D366;
             padding: 12px;
             font-size: 14px;
+            margin-top: 0;
         }
         
         .payment-btn.orange {
@@ -206,18 +274,23 @@
             color: #dc3545;
         }
         
-        .intention-preset {
-            display: inline-block;
+        .preset-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        
+        .preset {
             background: #e0e0e0;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 12px;
-            margin: 3px;
+            font-size: 11px;
             cursor: pointer;
             transition: background 0.2s;
         }
         
-        .intention-preset:hover {
+        .preset:hover {
             background: #667eea;
             color: white;
         }
@@ -231,7 +304,7 @@
                 font-size: 1.5rem;
             }
             
-            .category-buttons {
+            .payment-buttons {
                 flex-direction: column;
             }
         }
@@ -240,7 +313,7 @@
 <body>
     <div class="container">
         <h1>🕊️ Demande de Messe</h1>
-        <div class="subtitle">Confiez votre intention de prière</div>
+        <div class="subtitle">Confiez vos intentions de prière</div>
         
         <form id="messeForm">
             <div class="form-group">
@@ -250,7 +323,7 @@
             
             <div class="form-group">
                 <label>📞 Téléphone <span class="required">*</span></label>
-                <input type="tel" id="telephone" required placeholder="Votre numéro pour le ticket">
+                <input type="tel" id="telephone" required placeholder="Votre numéro (ex: 699999999)">
             </div>
             
             <div class="form-group">
@@ -269,7 +342,7 @@
             </div>
             
             <div class="form-group">
-                <label>📂 Catégorie</label>
+                <label>📂 Catégorie principale</label>
                 <div class="category-buttons">
                     <button type="button" class="cat-btn" data-cat="requiem">⚰️ Requiem</button>
                     <button type="button" class="cat-btn" data-cat="action">🙏 Action de grâce</button>
@@ -278,14 +351,16 @@
             </div>
             
             <div class="form-group">
-                <label>📝 Intention de la messe <span class="required">*</span></label>
-                <div id="presetContainer" style="margin-bottom: 10px; flex-wrap: wrap; display: flex;"></div>
-                <textarea id="intention" required placeholder="Décrivez votre intention..."></textarea>
+                <label>📝 Intentions (2000 FCFA chacune)</label>
+                <div class="preset-buttons" id="presetContainer"></div>
+                <div id="intentionsList"></div>
+                <button type="button" class="add-intention-btn" onclick="ajouterIntention()">+ Ajouter une intention</button>
             </div>
             
             <div class="price">
-                💰 Montant total : <span id="montantTotal">2000</span> FCFA
-                <input type="hidden" id="prix" value="2000">
+                <div class="price-label">💰 Montant total à payer</div>
+                <div class="price-amount" id="montantTotal">0</div>
+                <div class="price-label">FCFA (2000 FCFA par intention)</div>
             </div>
             
             <button type="submit" id="submitBtn">📨 Envoyer ma demande</button>
@@ -299,17 +374,22 @@
             <button class="payment-btn orange" onclick="paiementMoov()">📱 Payer par Moov Money</button>
         </div>
         
-        <div class="footer">🙏 Que Dieu vous bénisse | Chaque intention : 2000 FCFA</div>
+        <div class="footer">🙏 Que Dieu vous bénisse | 2000 FCFA par intention</div>
     </div>
     
     <script>
-        // Configuration du script Google Sheets
+        // Configuration
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymZiEZbW27xTn4CFMmbcVfd2Wkibmayn0ZxAtbEbJC3gTfiBvJ1kSkYut0bQ93PqaT/exec';
+        const PRIX_PAR_INTENTION = 2000;
         
-        // Intentions préremplies par catégorie
+        // Numéro de réception de l'argent (À MODIFIER par votre numéro)
+        const NUMERO_RECEPTION_ORANGE = '699999999';  // REMPLACEZ PAR VOTRE NUMÉRO
+        const NUMERO_RECEPTION_MOOV = '699999999';    // REMPLACEZ PAR VOTRE NUMÉRO
+        
+        // Intentions préremplies
         const intentionsPresets = {
             requiem: [
-                "Pour le repos de l'âme de [NOM du défunt]",
+                "Pour le repos de l'âme de [NOM]",
                 "Pour les défunts de ma famille",
                 "Pour les âmes du purgatoire",
                 "Anniversaire de décès de [NOM]"
@@ -318,32 +398,33 @@
                 "Action de grâce pour une grâce reçue",
                 "Pour remercier Dieu pour ma famille",
                 "Pour la guérison de [NOM]",
-                "Pour la réussite de [PROJET/EXAMEN]"
+                "Pour la réussite de [PROJET]"
             ],
             diverse: [
                 "Pour la paix dans le monde",
                 "Pour ma famille et mes proches",
                 "Pour la conversion des pécheurs",
                 "Pour les vocations sacerdotales",
-                "Pour mon travail et mes collègues",
+                "Pour mon travail",
                 "Pour la protection de nos enfants"
             ]
         };
         
-        let ticketData = null;
+        let intentions = [];
         let currentCategory = "requiem";
+        let ticketData = null;
+        let intentionId = 0;
         
         // Éléments DOM
         const nomInput = document.getElementById('nom');
         const telephoneInput = document.getElementById('telephone');
-        const intentionTextarea = document.getElementById('intention');
-        const presetContainer = document.getElementById('presetContainer');
+        const intentionsList = document.getElementById('intentionsList');
         const montantSpan = document.getElementById('montantTotal');
-        const ticketDiv = document.getElementById('ticket');
-        const paymentSection = document.getElementById('paymentSection');
         const messageDiv = document.getElementById('message');
         const submitBtn = document.getElementById('submitBtn');
         const form = document.getElementById('messeForm');
+        const ticketDiv = document.getElementById('ticket');
+        const paymentSection = document.getElementById('paymentSection');
         
         // Date par défaut = demain
         const tomorrow = new Date();
@@ -360,29 +441,81 @@
             });
         });
         
-        // Activer la première catégorie par défaut
         document.querySelector('.cat-btn').classList.add('active');
         updatePresets();
         
         function updatePresets() {
-            presetContainer.innerHTML = '';
+            const container = document.getElementById('presetContainer');
+            container.innerHTML = '';
             const presets = intentionsPresets[currentCategory];
             presets.forEach(preset => {
                 const span = document.createElement('span');
-                span.className = 'intention-preset';
+                span.className = 'preset';
                 span.textContent = preset;
-                span.onclick = () => {
-                    if (intentionTextarea.value) {
-                        intentionTextarea.value += '\n' + preset;
-                    } else {
-                        intentionTextarea.value = preset;
-                    }
-                };
-                presetContainer.appendChild(span);
+                span.onclick = () => ajouterIntentionAvecTexte(preset);
+                container.appendChild(span);
             });
         }
         
-        // Générer un numéro de ticket unique
+        function ajouterIntentionAvecTexte(texte) {
+            intentions.push({
+                id: intentionId++,
+                texte: texte
+            });
+            afficherIntentions();
+            calculerMontant();
+        }
+        
+        function ajouterIntention() {
+            intentions.push({
+                id: intentionId++,
+                texte: "Nouvelle intention..."
+            });
+            afficherIntentions();
+            calculerMontant();
+        }
+        
+        function supprimerIntention(id) {
+            intentions = intentions.filter(i => i.id !== id);
+            afficherIntentions();
+            calculerMontant();
+        }
+        
+        function modifierTexte(id, nouveauTexte) {
+            const intention = intentions.find(i => i.id === id);
+            if (intention) {
+                intention.texte = nouveauTexte;
+            }
+        }
+        
+        function afficherIntentions() {
+            if (intentions.length === 0) {
+                intentionsList.innerHTML = '<div style="color: #999; text-align: center; padding: 20px;">Aucune intention pour le moment. Cliquez sur "Ajouter" ou sur une intention préremplie.</div>';
+                return;
+            }
+            
+            let html = '';
+            intentions.forEach(intention => {
+                html += `
+                    <div class="intention-item">
+                        <div class="intention-header">
+                            <span class="intention-title">Intention ${intention.id + 1}</span>
+                            <span class="intention-price">${PRIX_PAR_INTENTION} FCFA</span>
+                            <button type="button" class="remove-intention" onclick="supprimerIntention(${intention.id})">✖ Supprimer</button>
+                        </div>
+                        <textarea class="intention-text" onchange="modifierTexte(${intention.id}, this.value)" placeholder="Décrivez votre intention...">${intention.texte}</textarea>
+                    </div>
+                `;
+            });
+            intentionsList.innerHTML = html;
+        }
+        
+        function calculerMontant() {
+            const total = intentions.length * PRIX_PAR_INTENTION;
+            montantSpan.textContent = total;
+            return total;
+        }
+        
         function genererNumeroTicket() {
             const date = new Date();
             const timestamp = date.getFullYear().toString() + 
@@ -395,9 +528,13 @@
             return `MESSE-${timestamp}-${random}`;
         }
         
-        // Afficher le ticket
         function afficherTicket(demande, numeroTicket) {
             const dateTicket = new Date().toLocaleString('fr-FR');
+            let intentionsText = '';
+            demande.intentions.forEach((int, idx) => {
+                intentionsText += `${idx+1}. ${int.texte.substring(0, 80)}...\n`;
+            });
+            
             ticketDiv.style.display = 'block';
             ticketDiv.innerHTML = `
                 <div style="text-align: center; margin-bottom: 10px;">
@@ -410,8 +547,10 @@
                 <p><strong>Téléphone :</strong> ${demande.telephone}</p>
                 <p><strong>Date messe :</strong> ${demande.date}</p>
                 <p><strong>Horaire :</strong> ${demande.horaire}</p>
-                <p><strong>Catégorie :</strong> ${currentCategory}</p>
-                <p><strong>Intention :</strong> ${demande.intention.substring(0, 100)}...</p>
+                <p><strong>Catégorie :</strong> ${demande.categorie}</p>
+                <p><strong>Nombre d'intentions :</strong> ${demande.intentions.length}</p>
+                <div style="border-top: 1px dashed #ccc; margin: 8px 0;"></div>
+                <p><strong>Intentions :</strong><br>${intentionsText}</p>
                 <div style="border-top: 1px dashed #ccc; margin: 8px 0;"></div>
                 <p style="text-align: center;"><strong>Montant à payer : ${demande.prix} FCFA</strong></p>
                 <div style="border-top: 1px dashed #ccc; margin: 8px 0;"></div>
@@ -419,59 +558,67 @@
             `;
         }
         
-        // Fonctions de paiement
+        // Paiement avec ouverture USSD
         function paiementOrange() {
             if (!ticketData) return;
-            const phone = ticketData.telephone;
-            const amount = ticketData.prix;
-            const ticketNum = ticketData.numeroTicket;
+            const montant = ticketData.prix;
+            const telephoneEnvoyeur = ticketData.telephone;
+            const telephoneReceveur = NUMERO_RECEPTION_ORANGE;
             
-            // Redirection vers le paiement Orange Money
-            const orangePaymentUrl = `https://api.orange.com/orange_money/web_payment?phone=${phone}&amount=${amount}&reference=${ticketNum}`;
+            // Code USSD Orange Money
+            // Format: *144*numero_receveur*montant#
+            const codeUSSD = `*144*${telephoneReceveur}*${montant}#`;
             
-            // Message d'information
             messageDiv.className = 'message info';
-            messageDiv.textContent = `📱 Redirection vers Orange Money pour le paiement de ${amount} FCFA...`;
+            messageDiv.textContent = `📱 Ouverture du code USSD Orange Money... Montant: ${montant} FCFA`;
             messageDiv.style.display = 'block';
             
-            // Simuler une redirection (dans la vraie vie, on utiliserait l'API Orange)
+            // Redirection vers le code USSD (fonctionne sur les vrais téléphones)
+            window.location.href = `tel:${codeUSSD}`;
+            
             setTimeout(() => {
                 messageDiv.className = 'message success';
-                messageDiv.textContent = `✅ Demande de paiement Orange Money envoyée au ${phone}. Vous allez recevoir une notification sur votre téléphone.`;
+                messageDiv.textContent = `✅ Code USSD ouvert. Composez le ${codeUSSD} sur votre téléphone pour finaliser le paiement.`;
                 setTimeout(() => {
                     messageDiv.style.display = 'none';
-                }, 5000);
-            }, 1500);
+                }, 8000);
+            }, 1000);
             
-            // Envoyer la confirmation
-            envoyerConfirmationPaiement('Orange Money');
+            envoyerConfirmationPaiement('Orange Money', montant);
         }
         
         function paiementMoov() {
             if (!ticketData) return;
-            const phone = ticketData.telephone;
-            const amount = ticketData.prix;
-            const ticketNum = ticketData.numeroTicket;
+            const montant = ticketData.prix;
+            const telephoneEnvoyeur = ticketData.telephone;
+            const telephoneReceveur = NUMERO_RECEPTION_MOOV;
+            
+            // Code USSD Moov Money
+            // Format: *144*numero_receveur*montant# (vérifier selon opérateur)
+            const codeUSSD = `*144*${telephoneReceveur}*${montant}#`;
             
             messageDiv.className = 'message info';
-            messageDiv.textContent = `📱 Redirection vers Moov Money pour le paiement de ${amount} FCFA...`;
+            messageDiv.textContent = `📱 Ouverture du code USSD Moov Money... Montant: ${montant} FCFA`;
             messageDiv.style.display = 'block';
+            
+            window.location.href = `tel:${codeUSSD}`;
             
             setTimeout(() => {
                 messageDiv.className = 'message success';
-                messageDiv.textContent = `✅ Demande de paiement Moov Money envoyée au ${phone}. Vous allez recevoir une notification sur votre téléphone.`;
+                messageDiv.textContent = `✅ Code USSD ouvert. Composez le ${codeUSSD} sur votre téléphone pour finaliser le paiement.`;
                 setTimeout(() => {
                     messageDiv.style.display = 'none';
-                }, 5000);
-            }, 1500);
+                }, 8000);
+            }, 1000);
             
-            envoyerConfirmationPaiement('Moov Money');
+            envoyerConfirmationPaiement('Moov Money', montant);
         }
         
-        function envoyerConfirmationPaiement(moyen) {
+        function envoyerConfirmationPaiement(moyen, montant) {
             const data = {
                 ...ticketData,
                 moyenPaiement: moyen,
+                montantPaye: montant,
                 statutPaiement: 'En attente',
                 dateTicket: new Date().toLocaleString('fr-FR')
             };
@@ -491,18 +638,39 @@
             const telephone = telephoneInput.value.trim();
             const date = document.getElementById('date').value;
             const horaire = document.getElementById('horaire').value;
-            const intention = intentionTextarea.value.trim();
-            const prix = 2000;
             
-            if (!nom || !telephone || !date || !intention) {
+            if (!nom || !telephone || !date) {
                 messageDiv.className = 'message error';
-                messageDiv.textContent = '❌ Veuillez remplir tous les champs obligatoires (nom, téléphone, date, intention).';
+                messageDiv.textContent = '❌ Veuillez remplir tous les champs obligatoires (nom, téléphone, date).';
                 messageDiv.style.display = 'block';
                 setTimeout(() => {
                     messageDiv.style.display = 'none';
                 }, 3000);
                 return;
             }
+            
+            if (intentions.length === 0) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = '❌ Veuillez ajouter au moins une intention.';
+                messageDiv.style.display = 'block';
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+                return;
+            }
+            
+            const intentionsValides = intentions.filter(i => i.texte.trim() !== '');
+            if (intentionsValides.length === 0) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = '❌ Veuillez décrire vos intentions.';
+                messageDiv.style.display = 'block';
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+                return;
+            }
+            
+            const prixTotal = intentions.length * PRIX_PAR_INTENTION;
             
             submitBtn.disabled = true;
             submitBtn.textContent = '⏳ Envoi en cours...';
@@ -512,9 +680,10 @@
                 telephone: telephone,
                 date: date,
                 horaire: horaire,
-                intention: intention,
+                intentions: intentions.map(i => i.texte),
                 categorie: currentCategory,
-                prix: prix,
+                nbIntentions: intentions.length,
+                prix: prixTotal,
                 dateSoumission: new Date().toLocaleString('fr-FR')
             };
             
@@ -541,10 +710,6 @@
                 afficherTicket(demande, numeroTicket);
                 paymentSection.style.display = 'flex';
                 
-                form.reset();
-                document.getElementById('date').value = tomorrow.toISOString().split('T')[0];
-                intentionTextarea.value = '';
-                
                 setTimeout(() => {
                     messageDiv.style.display = 'none';
                 }, 5000);
@@ -562,6 +727,9 @@
                 submitBtn.textContent = '📨 Envoyer ma demande';
             }
         });
+        
+        // Ajouter une première intention par défaut
+        ajouterIntention();
     </script>
 </body>
 </html>
