@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Demande de Messe</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.02);
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕊️ Demande de Messe</h1>
+        <div class="subtitle">Confiez votre intention de prière</div>
+        
+        <form id="messeForm">
+            <div class="form-group">
+                <label>🙏 Votre nom</label>
+                <input type="text" id="nom" required placeholder="Ex: Marie Dupont">
+            </div>
+            
+            <div class="form-group">
+                <label>📅 Date souhaitée</label>
+                <input type="date" id="date" required>
+            </div>
+            
+            <div class="form-group">
+                <label>⏰ Horaire préféré</label>
+                <select id="horaire">
+                    <option value="Matin (8h)">Matin (8h)</option>
+                    <option value="Midi (12h)">Midi (12h)</option>
+                    <option value="Soir (18h30)">Soir (18h30)</option>
+                    <option value="Flexible">Flexible</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>📝 Intention de la messe</label>
+                <textarea id="intention" required placeholder="Pour qui ou pour quoi souhaitez-vous prier ?"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>📞 Téléphone (optionnel)</label>
+                <input type="tel" id="telephone" placeholder="Pour vous confirmer">
+            </div>
+            
+            <button type="submit">📨 Envoyer ma demande</button>
+        </form>
+        
+        <div id="message" class="message"></div>
+        <div class="footer">🙏 Que Dieu vous bénisse</div>
+    </div>
+    
+    <script>
+        // ICI : remplacer par ton ID de feuille Google Sheets
+        // On verra ça après
+        const SCRIPT_URL = 'TON_URL_GOOGLE_SCRIPT_ICI';
+        
+        const form = document.getElementById('messeForm');
+        const messageDiv = document.getElementById('message');
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                nom: document.getElementById('nom').value,
+                date: document.getElementById('date').value,
+                horaire: document.getElementById('horaire').value,
+                intention: document.getElementById('intention').value,
+                telephone: document.getElementById('telephone').value,
+                dateSoumission: new Date().toLocaleString('fr-FR')
+            };
+            
+            messageDiv.className = 'message';
+            messageDiv.textContent = 'Envoi en cours...';
+            messageDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                messageDiv.className = 'message success';
+                messageDiv.textContent = '✅ Demande envoyée ! Vous serez informé(e) dès que possible.';
+                form.reset();
+                
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+                
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = '❌ Erreur. Veuillez réessayer ou contacter la paroisse.';
+            }
+        });
+        
+        // Date par défaut = demain
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('date').value = tomorrow.toISOString().split('T')[0];
+    </script>
+</body>
+</html>
