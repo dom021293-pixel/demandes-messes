@@ -21,36 +21,30 @@
         .header {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 24px 20px;
+            padding: 20px;
             text-align: center;
             border-radius: 20px;
-            margin-bottom: 24px;
-        }
-        
-        .header h1 {
-            font-size: 1.6rem;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
         }
         
         .stats {
             display: flex;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
         
         .stat-card {
             background: white;
             flex: 1;
-            min-width: 120px;
-            padding: 16px;
+            padding: 15px;
             border-radius: 16px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .stat-number {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
             color: #2a5298;
         }
@@ -58,26 +52,34 @@
         .stat-label {
             font-size: 12px;
             color: #666;
-            margin-top: 4px;
+            margin-top: 5px;
         }
         
         .filters {
             background: white;
-            padding: 16px;
+            padding: 15px;
             border-radius: 16px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
         }
         
         .filters input, .filters select {
-            padding: 10px 16px;
+            padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 12px;
+            border-radius: 10px;
             flex: 1;
             min-width: 150px;
-            font-size: 14px;
+        }
+        
+        .refresh-btn {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
         }
         
         .table-container {
@@ -96,51 +98,37 @@
         th {
             background: #2a5298;
             color: white;
-            padding: 14px;
+            padding: 12px;
             text-align: left;
-            font-weight: 600;
             position: sticky;
             top: 0;
         }
         
         td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
         }
         
         tr:hover {
             background: #f8f9fa;
         }
         
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        
         .status-pending {
             background: #ff4757;
             color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            display: inline-block;
         }
         
         .status-done {
             background: #2ed573;
             color: white;
-        }
-        
-        .refresh-btn {
-            background: #2a5298;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            display: inline-block;
         }
         
         .loading {
@@ -149,57 +137,40 @@
             color: #666;
         }
         
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 16px;
-            border-radius: 12px;
-            margin: 16px 0;
-        }
-        
         .footer {
             text-align: center;
-            margin-top: 24px;
+            margin-top: 20px;
             color: #666;
             font-size: 12px;
         }
         
         @media (max-width: 768px) {
             body {
-                padding: 12px;
+                padding: 10px;
             }
             
             th, td {
-                font-size: 12px;
+                font-size: 11px;
                 padding: 8px;
-            }
-            
-            .stat-number {
-                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📋 Administration des messes</h1>
-        <p>Consultez et gérez les intentions de messe</p>
+        <h1>📋 Demandes de messe</h1>
+        <p>Liste des intentions reçues</p>
     </div>
     
     <div class="stats" id="stats">
-        <div class="stat-card"><div class="stat-number" id="totalCount">-</div><div class="stat-label">Total demandes</div></div>
+        <div class="stat-card"><div class="stat-number" id="totalCount">-</div><div class="stat-label">Total</div></div>
         <div class="stat-card"><div class="stat-number" id="pendingCount">-</div><div class="stat-label">En attente</div></div>
         <div class="stat-card"><div class="stat-number" id="todayCount">-</div><div class="stat-label">Aujourd'hui</div></div>
     </div>
     
     <div class="filters">
-        <input type="text" id="searchInput" placeholder="🔍 Rechercher par nom...">
-        <select id="statusFilter">
-            <option value="all">Tous les statuts</option>
-            <option value="Non traitée">Non traitées</option>
-            <option value="Traité">Traitées</option>
-        </select>
-        <button class="refresh-btn" onclick="chargerDemandes()">🔄 Actualiser</button>
+        <input type="text" id="searchInput" placeholder="🔍 Rechercher un nom...">
+        <button class="refresh-btn" onclick="chargerDepuisAPI()">🔄 Actualiser</button>
     </div>
     
     <div class="table-container" id="tableContainer">
@@ -207,57 +178,127 @@
     </div>
     
     <div class="footer">
-        Mise à jour automatique toutes les 30 secondes
+        📊 Les données sont automatiquement synchronisées avec Google Sheets
     </div>
     
     <script>
-        // ⚠️ IMPORTANT : Remplace par l'ID de ta feuille
+        // Ton ID de feuille Google Sheets
         const SHEET_ID = '1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ';
         
-        let toutesLesDemandes = [];
-        
-        async function chargerDemandes() {
+        async function chargerDepuisAPI() {
             const container = document.getElementById('tableContainer');
             container.innerHTML = '<div class="loading">⏳ Chargement...</div>';
             
             try {
-                // Utilisation de l'API Google Sheets en lecture seule
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Feuille%201?key=API_KEY_ICI`;
-                // Note: Google Sheets API nécessite une clé API
-                // Solution alternative plus simple ci-dessous
+                // Utiliser Google Sheets CSV export (pas besoin de clé API !)
+                const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
                 
-                // Solution sans API : utiliser un service tiers ou CSV
-                chargerDepuisCSV();
+                const response = await fetch(csvUrl);
+                const csvText = await response.text();
+                
+                // Convertir CSV en tableau
+                const lignes = csvText.split('\n');
+                const entetes = lignes[0].split(',');
+                
+                const demandes = [];
+                for (let i = 1; i < lignes.length; i++) {
+                    if (lignes[i].trim() === '') continue;
+                    const valeurs = lignes[i].split(',');
+                    const demande = {};
+                    for (let j = 0; j < entetes.length; j++) {
+                        demande[entetes[j].trim()] = valeurs[j] ? valeurs[j].trim() : '';
+                    }
+                    demandes.push(demande);
+                }
+                
+                afficherTableau(demandes);
+                mettreAJourStats(demandes);
                 
             } catch (error) {
                 console.error('Erreur:', error);
-                container.innerHTML = '<div class="error">❌ Erreur de chargement. Utilisez les boutons ci-dessous pour accéder directement au tableau.</div>';
+                container.innerHTML = `
+                    <div style="padding: 40px; text-align: center;">
+                        <p style="color: #dc3545;">❌ Impossible de charger les données</p>
+                        <p style="margin-top: 10px;">Vérifiez que votre feuille est publiée :</p>
+                        <p style="margin-top: 10px;">Fichier → Partager → Publier sur le web</p>
+                        <a href="https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit" target="_blank" style="display: inline-block; margin-top: 20px; background: #2a5298; color: white; padding: 10px 20px; text-decoration: none; border-radius: 10px;">
+                            📊 Ouvrir Google Sheets
+                        </a>
+                    </div>
+                `;
             }
         }
         
-        // Solution alternative : lien direct vers Google Sheets
-        function chargerDepuisCSV() {
+        function afficherTableau(demandes) {
             const container = document.getElementById('tableContainer');
-            container.innerHTML = `
-                <div style="padding: 40px; text-align: center;">
-                    <p style="margin-bottom: 20px;">📊 Pour voir toutes les demandes, cliquez sur le bouton ci-dessous :</p>
-                    <a href="https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 12px; font-weight: bold;">
-                        📊 Ouvrir Google Sheets
-                    </a>
-                    <p style="margin-top: 20px; font-size: 12px; color: #666;">Toutes les demandes sont accessibles dans votre feuille Google Sheets.</p>
-                </div>
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtrees = demandes;
+            if (searchTerm) {
+                filtrees = demandes.filter(d => 
+                    d.Nom && d.Nom.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (filtrees.length === 0) {
+                container.innerHTML = '<div style="padding: 40px; text-align: center; color: #999;">📭 Aucune demande trouvée</div>';
+                return;
+            }
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Nom</th>
+                            <th>Date messe</th>
+                            <th>Horaire</th>
+                            <th>Intention</th>
+                            <th>Téléphone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
             `;
+            
+            for (const d of filtrees) {
+                html += `
+                    <tr>
+                        <td>${d.Horodatage || '-'}</td>
+                        <td><strong>${d.Nom || '-'}</strong></td>
+                        <td>${d.Date || '-'}</td>
+                        <td>${d.Horaire || '-'}</td>
+                        <td style="max-width: 250px;">${(d.Intention || '-').substring(0, 80)}</td>
+                        <td>${d.Téléphone || '-'}</td>
+                    </tr>
+                `;
+            }
+            
+            html += `</tbody></table>`;
+            container.innerHTML = html;
         }
         
-        function afficherDemandes() {
-            // Cette fonction serait utilisée avec l'API
+        function mettreAJourStats(demandes) {
+            document.getElementById('totalCount').textContent = demandes.length;
+            
+            const aujourdHui = new Date().toLocaleDateString('fr-FR');
+            const aujourdHuiCount = demandes.filter(d => {
+                const dateDemande = d.Horodatage ? d.Horodatage.split(' ')[0] : '';
+                return dateDemande === aujourdHui;
+            }).length;
+            document.getElementById('todayCount').textContent = aujourdHuiCount;
+            
+            const pendingCount = demandes.length;
+            document.getElementById('pendingCount').textContent = pendingCount;
         }
+        
+        // Recherche en temps réel
+        document.getElementById('searchInput').addEventListener('input', () => chargerDepuisAPI());
         
         // Chargement initial
-        chargerDemandes();
+        chargerDepuisAPI();
         
-        // Rafraîchissement toutes les 30 secondes
-        setInterval(chargerDemandes, 30000);
+        // Actualisation toutes les 30 secondes
+        setInterval(chargerDepuisAPI, 30000);
     </script>
 </body>
 </html>
