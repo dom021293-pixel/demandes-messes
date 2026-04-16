@@ -15,6 +15,7 @@
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             background: #f0f2f5;
             min-height: 100vh;
+            padding: 20px;
         }
         
         .header {
@@ -22,7 +23,8 @@
             color: white;
             padding: 24px 20px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            margin-bottom: 24px;
         }
         
         .header h1 {
@@ -30,32 +32,25 @@
             margin-bottom: 8px;
         }
         
-        .header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
         .stats {
             display: flex;
             gap: 12px;
-            padding: 16px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
-            max-width: 600px;
-            margin: 0 auto;
         }
         
         .stat-card {
             background: white;
             flex: 1;
-            min-width: 100px;
+            min-width: 120px;
             padding: 16px;
-            border-radius: 12px;
+            border-radius: 16px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .stat-number {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
             color: #2a5298;
         }
@@ -66,90 +61,121 @@
             margin-top: 4px;
         }
         
-        .info-bar {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 14px 20px;
-            margin: 16px;
-            border-radius: 10px;
-            font-size: 14px;
-            max-width: 800px;
-            margin: 16px auto;
-        }
-        
-        .actions {
+        .filters {
+            background: white;
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
             display: flex;
             gap: 12px;
-            padding: 0 16px;
-            margin: 24px auto;
             flex-wrap: wrap;
-            justify-content: center;
         }
         
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 28px;
+        .filters input, .filters select {
+            padding: 10px 16px;
+            border: 1px solid #ddd;
             border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s, background 0.2s;
-            cursor: pointer;
-            border: none;
-            font-size: 16px;
+            flex: 1;
+            min-width: 150px;
+            font-size: 14px;
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .preview-card {
+        .table-container {
             background: white;
             border-radius: 16px;
-            padding: 24px;
-            margin: 20px auto;
-            max-width: 900px;
-            text-align: center;
+            overflow-x: auto;
             box-shadow: 0 2px 12px rgba(0,0,0,0.1);
         }
         
-        .preview-card h3 {
-            color: #333;
-            margin-bottom: 16px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
         }
         
-        .preview-card img {
-            max-width: 100%;
+        th {
+            background: #2a5298;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .status-done {
+            background: #2ed573;
+            color: white;
+        }
+        
+        .refresh-btn {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 10px 20px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
         }
         
         .footer {
             text-align: center;
-            padding: 20px;
+            margin-top: 24px;
             color: #666;
             font-size: 12px;
         }
         
         @media (max-width: 768px) {
-            .btn {
-                padding: 12px 20px;
-                font-size: 14px;
+            body {
+                padding: 12px;
+            }
+            
+            th, td {
+                font-size: 12px;
+                padding: 8px;
             }
             
             .stat-number {
-                font-size: 22px;
+                font-size: 24px;
             }
         }
     </style>
@@ -157,75 +183,81 @@
 <body>
     <div class="header">
         <h1>📋 Administration des messes</h1>
-        <p>Gérez les intentions de messe en temps réel</p>
+        <p>Consultez et gérez les intentions de messe</p>
     </div>
     
     <div class="stats" id="stats">
-        <!-- Les stats seront mises à jour dynamiquement -->
+        <div class="stat-card"><div class="stat-number" id="totalCount">-</div><div class="stat-label">Total demandes</div></div>
+        <div class="stat-card"><div class="stat-number" id="pendingCount">-</div><div class="stat-label">En attente</div></div>
+        <div class="stat-card"><div class="stat-number" id="todayCount">-</div><div class="stat-label">Aujourd'hui</div></div>
     </div>
     
-    <div class="info-bar">
-        💡 <strong>Conseils :</strong><br>
-        • Les nouvelles demandes apparaissent automatiquement en <strong>bas du tableau</strong><br>
-        • Pour <strong>marquer une demande comme traitée</strong> : ajoute une colonne "Statut" et écris "Traité"<br>
-        • Pour recevoir un <strong>email à chaque nouvelle demande</strong> : Outils → Notifications → Email immédiat<br>
-        • Vous pouvez <strong>filtrer, trier</strong> et <strong>exporter</strong> les demandes directement dans le tableau
+    <div class="filters">
+        <input type="text" id="searchInput" placeholder="🔍 Rechercher par nom...">
+        <select id="statusFilter">
+            <option value="all">Tous les statuts</option>
+            <option value="Non traitée">Non traitées</option>
+            <option value="Traité">Traitées</option>
+        </select>
+        <button class="refresh-btn" onclick="chargerDemandes()">🔄 Actualiser</button>
     </div>
     
-    <div class="actions">
-        <a href="https://docs.google.com/spreadsheets/d/1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ/edit" target="_blank" class="btn btn-primary">
-            📊 Ouvrir Google Sheets (édition complète)
-        </a>
-        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04tZqrMVf03yJwnkzBXX6xaeZPy0biNGUCpRVF6e0-WKaHGGDN8Qa8OJKJk4C4YoBXxcse9EAtrVl/pubhtml" target="_blank" class="btn btn-secondary">
-            👁️ Voir la version publiée
-        </a>
-    </div>
-    
-    <div class="preview-card">
-        <h3>📋 Aperçu des demandes</h3>
-        <p style="margin-bottom: 16px; color: #666;">Cliquez sur l'un des boutons ci-dessus pour accéder à votre tableau</p>
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23f0f2f5'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23666' font-family='system-ui'%3E📊 Tableau des demandes%3C/text%3E%3C/svg%3E" alt="Aperçu tableau">
+    <div class="table-container" id="tableContainer">
+        <div class="loading">⏳ Chargement des demandes...</div>
     </div>
     
     <div class="footer">
-        Dernière vérification : <span id="lastUpdate"></span>
+        Mise à jour automatique toutes les 30 secondes
     </div>
     
     <script>
-        // URL de la feuille pour les statistiques (optionnel)
-        const SHEETS_EDIT_URL = 'https://docs.google.com/spreadsheets/d/1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ/edit';
+        // ⚠️ IMPORTANT : Remplace par l'ID de ta feuille
+        const SHEET_ID = '1fTpQ18Rc_15b57fIPZc2Zuam7AvO23_YjS3PcheludQ';
         
-        // Met à jour l'heure
-        function updateLastUpdateTime() {
-            const now = new Date();
-            document.getElementById('lastUpdate').textContent = now.toLocaleString('fr-FR');
+        let toutesLesDemandes = [];
+        
+        async function chargerDemandes() {
+            const container = document.getElementById('tableContainer');
+            container.innerHTML = '<div class="loading">⏳ Chargement...</div>';
+            
+            try {
+                // Utilisation de l'API Google Sheets en lecture seule
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Feuille%201?key=API_KEY_ICI`;
+                // Note: Google Sheets API nécessite une clé API
+                // Solution alternative plus simple ci-dessous
+                
+                // Solution sans API : utiliser un service tiers ou CSV
+                chargerDepuisCSV();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                container.innerHTML = '<div class="error">❌ Erreur de chargement. Utilisez les boutons ci-dessous pour accéder directement au tableau.</div>';
+            }
         }
         
-        // Statistiques indicatives
-        function updateStats() {
-            const statsDiv = document.getElementById('stats');
-            statsDiv.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-number">📊</div>
-                    <div class="stat-label">Consultez le tableau</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">✅</div>
-                    <div class="stat-label">Marquez les traités</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">📧</div>
-                    <div class="stat-label">Notifications email</div>
+        // Solution alternative : lien direct vers Google Sheets
+        function chargerDepuisCSV() {
+            const container = document.getElementById('tableContainer');
+            container.innerHTML = `
+                <div style="padding: 40px; text-align: center;">
+                    <p style="margin-bottom: 20px;">📊 Pour voir toutes les demandes, cliquez sur le bouton ci-dessous :</p>
+                    <a href="https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 12px; font-weight: bold;">
+                        📊 Ouvrir Google Sheets
+                    </a>
+                    <p style="margin-top: 20px; font-size: 12px; color: #666;">Toutes les demandes sont accessibles dans votre feuille Google Sheets.</p>
                 </div>
             `;
         }
         
-        // Initialisation
-        updateStats();
-        updateLastUpdateTime();
+        function afficherDemandes() {
+            // Cette fonction serait utilisée avec l'API
+        }
         
-        // Rafraîchir l'heure toutes les minutes
-        setInterval(updateLastUpdateTime, 60000);
+        // Chargement initial
+        chargerDemandes();
+        
+        // Rafraîchissement toutes les 30 secondes
+        setInterval(chargerDemandes, 30000);
     </script>
 </body>
 </html>
