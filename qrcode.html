@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code - Application Messes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: system-ui, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 32px;
+            padding: 30px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .qrcode {
+            background: white;
+            padding: 20px;
+            border-radius: 24px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        canvas {
+            width: 250px;
+            height: 250px;
+        }
+        .url {
+            background: #f0f2f5;
+            padding: 12px;
+            border-radius: 12px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-size: 14px;
+            color: #667eea;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        .instructions {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 16px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .instructions h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .instructions ol {
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 8px 0;
+        }
+        @media (max-width: 480px) {
+            .container { padding: 20px; }
+            canvas { width: 200px; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕊️ Application Messes</h1>
+        <div class="subtitle">Scannez pour accéder à l'application</div>
+        
+        <div class="qrcode">
+            <canvas id="qrcode"></canvas>
+        </div>
+        
+        <div class="url" id="appUrl">
+            Chargement...
+        </div>
+        
+        <a href="#" id="appLink" class="btn">📱 Ouvrir l'application</a>
+        
+        <div class="instructions">
+            <h3>📱 Comment installer :</h3>
+            <ol>
+                <li><strong>Android (Chrome)</strong> : Ouvrez le lien → "Ajouter à l'écran d'accueil"</li>
+                <li><strong>iPhone (Safari)</strong> : Ouvrez le lien → Partager → "Sur l'écran d'accueil"</li>
+                <li>L'application apparaîtra comme une vraie app !</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script>
+        // ⚠️ REMPLACEZ PAR VOTRE URL GITHUB PAGES
+        const APP_URL = 'https://TON-COMPTE.github.io/demandes-messes/index.html';
+        
+        document.getElementById('appUrl').textContent = APP_URL;
+        document.getElementById('appLink').href = APP_URL;
+        
+        // Générer le QR code
+        new QRCode(document.getElementById("qrcode"), {
+            text: APP_URL,
+            width: 250,
+            height: 250,
+            colorDark: "#333333",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    </script>
+</body>
+</html>
