@@ -352,8 +352,8 @@ button[type="submit"]:hover {
         const PRIX_PAR_INTENTION = 2000;
         
         // ⚠️ REMPLACE CES NUMÉROS PAR TON NUMÉRO DE RÉCEPTION
-        const NUMERO_RECEPTION_ORANGE = '76 XX XX XX';  // Ton numéro Orange
-        const NUMERO_RECEPTION_MOOV = '70 XX XX XX';    // Ton numéro Moov
+        const NUMERO_RECEPTION_ORANGE = '44 10 10 67';  // Ton numéro Orange
+        const NUMERO_RECEPTION_MOOV = '73 26 68 22';    // Ton numéro Moov
         
         const intentionsPresets = {
             "Requiem": ["Pour le repos de l'âme de ", "Pour le repos des âmes de ", "Pour les défunts de la famille ", "Pour les âmes du purgatoire ", "Pour le ... anniversaire de décès de "],
@@ -502,7 +502,7 @@ button[type="submit"]:hover {
             if (!ticketData) return;
             const montant = ticketData.prix;
             const telephoneReceveur = NUMERO_RECEPTION_ORANGE;
-            const codeUSSD = `*144*${telephoneReceveur}*${montant}#`;
+            const codeUSSD = `*144*1*${telephoneReceveur}*${montant}#`;
             
             messageDiv.className = 'message info';
             messageDiv.textContent = `📱 Code USSD: ${codeUSSD} - Composez ce code sur votre téléphone`;
@@ -520,7 +520,7 @@ button[type="submit"]:hover {
             if (!ticketData) return;
             const montant = ticketData.prix;
             const telephoneReceveur = NUMERO_RECEPTION_MOOV;
-            const codeUSSD = `*144*${telephoneReceveur}*${montant}#`;
+            const codeUSSD = `*555*2*${telephoneReceveur}*${montant}#`;
             
             messageDiv.className = 'message info';
             messageDiv.textContent = `📱 Code USSD: ${codeUSSD} - Composez ce code sur votre téléphone`;
