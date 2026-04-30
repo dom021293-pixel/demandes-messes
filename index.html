@@ -11,163 +11,273 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Demande de Messe - Paroisse</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: system-ui, sans-serif;
-        }
-        .container {
-            max-width: 600px;
-            width: 100%;
-            background: white;
-            border-radius: 28px;
-            padding: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        h1 { color: #333; text-align: center; font-size: 1.8rem; margin-bottom: 8px; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 28px; font-size: 0.9rem; }
-        .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 14px;
-            font-size: 16px;
-            font-family: inherit;
-        }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; }
-        textarea { resize: vertical; min-height: 80px; }
-        .category-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .cat-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .cat-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-        }
-        .intention-item {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-            border-left: 4px solid #667eea;
-        }
-        .intention-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .intention-price { color: #2a5298; font-weight: bold; }
-        .remove-intention {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .add-intention-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            width: 100%;
-            margin: 10px 0;
-        }
-        .price {
-            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            margin: 15px 0;
-        }
-        .price-amount { font-size: 28px; font-weight: bold; color: #2a5298; }
-        button {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .message {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 12px;
-            display: none;
-            font-size: 14px;
-        }
-        .message.success { background: #d4edda; color: #155724; display: block; border-left: 4px solid #28a745; }
-        .message.error { background: #f8d7da; color: #721c24; display: block; border-left: 4px solid #dc3545; }
-        .message.info { background: #d1ecf1; color: #0c5460; display: block; border-left: 4px solid #17a2b8; }
-        .ticket {
-            background: #fff9e6;
-            border: 2px dashed #ffc107;
-            border-radius: 16px;
-            padding: 16px;
-            margin: 15px 0;
-            font-size: 12px;
-            display: none;
-        }
-        .payment-buttons {
-            display: flex;
-            gap: 12px;
-            margin: 15px 0;
-            display: none;
-        }
-        .payment-btn {
-            flex: 1;
-            background: white;
-            border: 2px solid #25D366;
-            color: #25D366;
-            padding: 12px;
-            font-size: 14px;
-            margin-top: 0;
-        }
-        .payment-btn.orange { border-color: #FF6600; color: #FF6600; }
-        .footer { text-align: center; margin-top: 24px; font-size: 0.75rem; color: #999; }
-        .preset {
-            display: inline-block;
-            background: #e0e0e0;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            margin: 3px;
-            cursor: pointer;
-        }
-        .preset:hover { background: #667eea; color: white; }
-        @media (max-width: 480px) { .container { padding: 20px; } h1 { font-size: 1.5rem; } .payment-buttons { flex-direction: column; } }
-    </style>
+       :root {
+    --primary: #667eea;
+    --secondary: #764ba2;
+    --success: #28a745;
+    --danger: #dc3545;
+    --text: #2d3748;
+    --muted: #718096;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui, sans-serif;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 620px;
+    width: 100%;
+    background: white;
+    border-radius: 24px;
+    padding: 26px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.25);
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+h1 {
+    text-align: center;
+    font-size: 1.9rem;
+    color: var(--text);
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    color: var(--text);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+    outline: none;
+}
+
+/* CATEGORY */
+.category-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.cat-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--primary);
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: 600;
+}
+
+.cat-btn:hover {
+    transform: translateY(-2px);
+}
+
+.cat-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+}
+
+/* INTENTIONS */
+.intention-item {
+    background: #f7fafc;
+    border-left: 4px solid var(--primary);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.intention-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.intention-price {
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.remove-intention {
+    background: var(--danger);
+    border: none;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.remove-intention:hover {
+    opacity: 0.8;
+}
+
+/* BUTTONS */
+.add-intention-btn {
+    background: var(--success);
+    border: none;
+    color: white;
+    padding: 11px;
+    border-radius: 12px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.2s;
+}
+
+.add-intention-btn:hover {
+    transform: scale(1.02);
+}
+
+/* PRICE */
+.price {
+    text-align: center;
+    background: #edf2ff;
+    padding: 16px;
+    border-radius: 14px;
+    margin: 18px 0;
+}
+
+.price-amount {
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+/* SUBMIT */
+button[type="submit"] {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    padding: 15px;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+}
+
+/* MESSAGE */
+.message {
+    margin-top: 18px;
+    padding: 12px;
+    border-radius: 10px;
+    display: none;
+}
+
+.message.success { background: #d4edda; color: #155724; display: block; }
+.message.error { background: #f8d7da; color: #721c24; display: block; }
+.message.info { background: #d1ecf1; color: #0c5460; display: block; }
+
+/* TICKET */
+.ticket {
+    background: #fff9e6;
+    border: 2px dashed #ffc107;
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+/* PAYMENT */
+.payment-buttons {
+    display: none;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.payment-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    border: 2px solid #25D366;
+    background: white;
+    color: #25D366;
+}
+
+.payment-btn.orange {
+    border-color: #FF6600;
+    color: #FF6600;
+}
+
+/* PRESETS */
+.preset {
+    display: inline-block;
+    background: #edf2f7;
+    padding: 6px 10px;
+    border-radius: 20px;
+    margin: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.preset:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+}    </style>
 </head>
 <body>
     <div class="container">
@@ -177,12 +287,12 @@
         <form id="messeForm">
             <div class="form-group">
                 <label>🙏 Votre nom <span style="color:#dc3545">*</span></label>
-                <input type="text" id="nom" required placeholder="Ex: Marie Dupont">
+                <input type="text" id="nom" required placeholder="Ex: ZOUNNGRANA Joel ou un(e) fidèle">
             </div>
             
             <div class="form-group">
                 <label>📞 Téléphone <span style="color:#dc3545">*</span></label>
-                <input type="tel" id="telephone" required placeholder="Votre numéro (ex: 699999999)">
+                <input type="tel" id="telephone" autocomplete="tel" required placeholder="Votre numéro (ex: 70 XX XX XX)">
             </div>
             
             <div class="form-group">
@@ -222,7 +332,7 @@
                 <div>FCFA (2000 FCFA par intention)</div>
             </div>
             
-            <button type="submit" id="submitBtn">📨 Envoyer ma demande</button>
+           <button type="submit" id="submitBtn">📨 Envoyer ma demande</button>
         </form>
         
         <div id="message" class="message"></div>
@@ -232,7 +342,7 @@
             <button class="payment-btn orange" onclick="paiementMoov()">📱 Payer par Moov Money</button>
         </div>
         
-        <div class="footer">🙏 Que Dieu vous bénisse | 2000 FCFA par intention</div>
+        <div class="footer">🙏 Que Dieu écoute et exauce nos prières !</div>
     </div>
     
     <script>
@@ -242,13 +352,13 @@
         const PRIX_PAR_INTENTION = 2000;
         
         // ⚠️ REMPLACE CES NUMÉROS PAR TON NUMÉRO DE RÉCEPTION
-        const NUMERO_RECEPTION_ORANGE = '699999999';  // Ton numéro Orange
-        const NUMERO_RECEPTION_MOOV = '699999999';    // Ton numéro Moov
+        const NUMERO_RECEPTION_ORANGE = '76 XX XX XX';  // Ton numéro Orange
+        const NUMERO_RECEPTION_MOOV = '70 XX XX XX';    // Ton numéro Moov
         
         const intentionsPresets = {
-            "Requiem": ["Pour le repos de l'âme de [NOM]", "Pour les défunts de ma famille", "Pour les âmes du purgatoire", "Anniversaire de décès de [NOM]"],
-            "Action de grâce": ["Action de grâce pour une grâce reçue", "Pour remercier Dieu pour ma famille", "Pour la guérison de [NOM]", "Pour la réussite de [PROJET]"],
-            "Demande diverse": ["Pour la paix dans le monde", "Pour ma famille et mes proches", "Pour la conversion des pécheurs", "Pour mon travail", "Pour la protection de nos enfants"]
+            "Requiem": ["Pour le repos de l'âme de ", "Pour le repos des âmes de ", "Pour les défunts de la famille ", "Pour les âmes du purgatoire ", "Pour le ... anniversaire de décès de "],
+            "Action de grâce": ["Action de grâce pour une grâce reçue ", "Action de grâce au Seigneur pour tous les bienfaits reçues ", "Action de grâce au Seigneur pour sa guérison ", "Action de grâce au Seigneur pour la réussite de son projet "],
+            "Demande diverse": ["Demande d'aide et de protection au Seigneur pour ", "Demande de guérison au Seigneur pour ", "Demande de délivrance au Seigneur pour ", "Demande de bénédiction au Seigneur pour ", "Pour la conversion des pécheurs"]
         };
         
         let intentions = [];
